@@ -7,6 +7,9 @@ RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selectio
 
 # nginx
 RUN apt-get install -y nginx
+COPY nginx.conf /etc/nginx/nginx.conf
+# expose port 80 for nginx
+EXPOSE 80
 
 # install mysql and configure it headlessly
 RUN apt-get update \
@@ -16,19 +19,14 @@ RUN apt-get update \
     && apt-get install -y net-tools --fix-missing \
     && rm -rf /var/lib/apt/lists/* 
 
-# install php
+# install php and supervisor
 
 RUN apt-get update && apt-get install -y php-fpm php-mysql supervisor
-
 RUN mkdir -p /var/log/supervisor /run/php/ /etc/nginx
-
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
-COPY nginx.conf /etc/nginx/nginx.conf
 
 # extract and add sentrifugo zip
 ADD Sentrifugo-2.1.1.zip /sentrifugo/
 
-EXPOSE 80
 
 CMD ["/usr/bin/supervisord"]
