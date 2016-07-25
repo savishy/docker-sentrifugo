@@ -2,9 +2,7 @@ FROM ubuntu:16.04
 RUN apt-get update
 RUN apt-get install -y debconf-utils
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
-RUN apt-get install -y nginx ufw
-RUN service ufw start
-RUN ufw allow 'Nginx HTTP'
+RUN apt-get install -y nginx
 RUN apt-get update \
     && echo mysql-server-5.7 mysql-server/root_password password example_password | debconf-set-selections \
     && echo mysql-server-5.7 mysql-server/root_password_again password example_password | debconf-set-selections \
