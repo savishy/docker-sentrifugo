@@ -8,17 +8,32 @@ I am using this as a real world example to learn Docker.
 1. Running multiple processes http://stackoverflow.com/a/25150809/682912
 2. nginx foreground http://honeyco.nyc/blog/running-nginx-in-the-foreground/
 2. php in foreground http://linux.die.net/man/8/php-fpm
+3. https://hub.docker.com/_/mysql/
 
 ### How to run ###
 
-`./run-container.sh`
+On a fresh start, run:
 
-This will start two containers, one for the app and another for the db. 
+```
+# this deletes any old containers you may have started previously.
+./delete-old-sentrifugo-containers.sh
+
+# This will start two containers, one for the app and another for the db.
+./run-container.sh
+```
 
 ### Implementation ###
 
+
+#### `sentrifugo-app` ###
+
+
 1. `sentrifugo-app` is an nginx application container.
-   This has `nginx` and `php-fpm`. 
+   This has `nginx` and `php-fpm`.
+1. Sentrifugo is installed to `/sentrifugo/`
+
+
+#### `sentrifugo-db` ###
 
 2. `sentrifugo-db` is a MySQL database container.
    This is linked to the nginx container as its database.

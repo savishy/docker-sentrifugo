@@ -7,7 +7,11 @@ RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selectio
 
 # nginx
 RUN apt-get install -y nginx
-COPY nginx.conf /etc/nginx/nginx.conf
+ADD nginx/nginx.conf /etc/nginx/nginx.conf
+ADD nginx/sites-available/sentrifugo /etc/nginx/sites-available/sentrifugo
+ADD nginx/sites-available/default /etc/nginx/sites-available/default
+RUN ln -s /etc/nginx/sites-available/sentrifugo /etc/nginx/sites-enabled/sentrifugo
+# RUN ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 # expose port 80 for nginx
 EXPOSE 80
 
@@ -21,12 +25,12 @@ RUN apt-get update \
 
 # install php and supervisor
 
-RUN apt-get update && apt-get install -y php-fpm php-mysql supervisor
+RUN apt-get update && apt-get install -y php-fpm php-mysql supervisor unzip
 RUN mkdir -p /var/log/supervisor /run/php/ /etc/nginx
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # extract and add sentrifugo zip
-ADD Sentrifugo-2.1.1.zip /sentrifugo/
-
+ADD Sentrifugo-2.1.1.zip /sentrifugo.zip
+RUN unzip /sentrifugo.zip -d / && rm -rfv /sentrifugo.zip && mv -v /Sentrifugo_2.1.1 /sentrifugo
 
 CMD ["/usr/bin/supervisord"]
