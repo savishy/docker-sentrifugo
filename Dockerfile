@@ -1,17 +1,26 @@
 FROM ubuntu:16.04
 RUN apt-get update
 
+# install needed packages
+RUN apt-get install -y debconf-utils nginx php-fpm php-mysql supervisor unzip
+
+# create directories
+RUN mkdir -p /var/log/supervisor /run/php/ /etc/nginx
+
 # fix for issue #1
-RUN apt-get install -y debconf-utils
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
 # nginx
-RUN apt-get install -y nginx
 ADD nginx/nginx.conf /etc/nginx/nginx.conf
 ADD nginx/sites-available/sentrifugo /etc/nginx/sites-available/sentrifugo
+RUN unlink /etc/nginx/sites-enabled/default
 ADD nginx/sites-available/default /etc/nginx/sites-available/default
 RUN ln -s /etc/nginx/sites-available/sentrifugo /etc/nginx/sites-enabled/sentrifugo
-# RUN ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+RUN ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+
+# test
+ADD index.nginx-debian.html /var/www/html/index.nginx-debian.html
+
 # expose port 80 for nginx
 EXPOSE 80
 
@@ -23,10 +32,10 @@ RUN apt-get update \
     && apt-get install -y net-tools --fix-missing \
     && rm -rf /var/lib/apt/lists/* 
 
-# install php and supervisor
+# configure php
+ADD php-fpm/php.ini /etc/php/7.0/fpm/php.ini
 
-RUN apt-get update && apt-get install -y php-fpm php-mysql supervisor unzip
-RUN mkdir -p /var/log/supervisor /run/php/ /etc/nginx
+# configure supervisor
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # extract and add sentrifugo zip
