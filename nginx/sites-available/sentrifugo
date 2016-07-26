@@ -34,7 +34,7 @@ server {
     #
     # include snippets/snakeoil.conf;
 
-    root /sentrifugo/;
+    root /usr/share/nginx/html/localhost;
 
     # Add index.php to the list if you are using PHP
     index index.php index.html index.htm index.nginx-debian.html;
