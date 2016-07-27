@@ -34,7 +34,7 @@ server {
     #
     # include snippets/snakeoil.conf;
 
-    root /usr/share/nginx/html/localhost;
+    root /usr/share/nginx/html/sentrifugo;
 
     # Add index.php to the list if you are using PHP
     index index.php index.html index.htm index.nginx-debian.html;
@@ -57,7 +57,7 @@ server {
 
         try_files $uri $uri/ /index.php?$args =404;
         fastcgi_split_path_info ^(.+\.php)(/.+)$;
-        fastcgi_pass unix:/run/php/php7.0-fpm-tribe.sock;
+        fastcgi_pass unix:/run/php/php5.0-fpm-sentrifugo.sock;
         fastcgi_index index.php;
         include fastcgi_params;
 	}
