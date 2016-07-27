@@ -57,7 +57,7 @@ server {
 
         try_files $uri $uri/ /index.php?$args =404;
         fastcgi_split_path_info ^(.+\.php)(/.+)$;
-        fastcgi_pass unix:/run/php/php7.0-fpm-tribe.sock;
+        fastcgi_pass unix:/run/php/php7.0-fpm-sentrifugo.sock;
         fastcgi_index index.php;
         include fastcgi_params;
 	}
