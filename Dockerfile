@@ -34,6 +34,7 @@ RUN rm /etc/nginx/sites-enabled/default
 RUN ln -s /etc/nginx/sites-available/sentrifugo /etc/nginx/sites-enabled/sentrifugo
 #RUN ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 
+
 # expose port 80 for nginx
 EXPOSE 80
 
@@ -41,6 +42,8 @@ EXPOSE 80
 ADD php-fpm/php.ini /etc/php/7.0/fpm/php.ini
 ADD php-fpm/sentrifugo.conf /etc/php/7.0/fpm/pool.d/sentrifugo.conf
 ADD php-fpm/php-fpm.conf /etc/php/7.0/fpm/php-fpm.conf
+# disable www.conf
+RUN mv /etc/php/7.0/fpm/pool.d/www.conf /etc/php/7.0/fpm/pool.d/www.conf.disabled
 
 # configure supervisor
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
