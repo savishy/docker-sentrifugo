@@ -8,15 +8,7 @@ I am using this as a real world example to learn Docker.
 **Prerequisite**: Download Sentrifugo.zip for Linux. Place it in the root directory.
 Name it `Sentrifugo.zip`.
 
-On a fresh start, run:
-
-```
-# this deletes any old containers you may have started previously.
-./delete-old-sentrifugo-containers.sh
-
-# This will start two containers, one for the app and another for the db.
-./run-container.sh
-```
+On a fresh start, run `docker-compose up`.
 
 ### Implementation ###
 
