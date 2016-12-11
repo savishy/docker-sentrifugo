@@ -10,7 +10,7 @@ RUN apt-get update \
     && echo mysql-server-5.7 mysql-server/root_password_again password example_password | debconf-set-selections \
     && apt-get install -y mysql-server-5.7 -o pkg::Options::="--force-confdef" -o pkg::Options::="--force-confold" --fix-missing \
     && apt-get install -y net-tools --fix-missing \
-    && rm -rf /var/lib/apt/lists/* 
+    && rm -rf /var/lib/apt/lists/*
 
 # add php 7 ppa
 RUN add-apt-repository ppa:ondrej/php
@@ -49,8 +49,8 @@ RUN mv /etc/php/7.0/fpm/pool.d/www.conf /etc/php/7.0/fpm/pool.d/www.conf.disable
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # extract and add sentrifugo zip
-ADD Sentrifugo-2.1.1.zip /sentrifugo.zip
-RUN unzip /sentrifugo.zip -d / && rm -rfv /sentrifugo.zip && mv -v /Sentrifugo_2.1.1 /sentrifugo
+ADD Sentrifugo.zip /Sentrifugo.zip
+RUN unzip /Sentrifugo.zip -d / && rm -rfv /Sentrifugo.zip && mv -v /Sentrifugo_3.0 /sentrifugo
 RUN chown -R www-data:www-data /sentrifugo/
 
 
