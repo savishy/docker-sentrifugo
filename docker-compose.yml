@@ -11,6 +11,14 @@ services:
   sentrifugo-db:
     image: mysql:5.7
     environment:
+      # mysql root user
       MYSQL_ROOT_PASSWORD: "root"
+      # create sentrifugo user and sentrifugo db
+      MYSQL_USER: "sentrifugo"
+      MYSQL_PASSWORD: "sentrifugo"
+      MYSQL_DATABASE: "sentrifugo"
+    volumes:
+      # mysql data dir
+      - ./mysql:/var/lib/mysql
     ports:
       - "3306:3306"
