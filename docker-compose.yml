@@ -2,6 +2,9 @@ version: '2'
 services:
   sentrifugo-app:
     build: .
+    volumes:
+      - ./nginx:/etc/nginx
+      - ./sentrifugo:/sentrifugo
     links:
       - sentrifugo-db:sentrifugo-db
     depends_on:

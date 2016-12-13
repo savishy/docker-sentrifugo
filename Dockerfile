@@ -12,13 +12,16 @@ RUN apt-get update \
     && apt-get install -y net-tools --fix-missing \
     && rm -rf /var/lib/apt/lists/*
 
-# add php 7 ppa
+# add php ppa
 RUN add-apt-repository ppa:ondrej/php
 RUN apt-get update
 # install php
 # TODO "There were unauthenticated packages and -y was used without --allow-unauthenticated"
 
-RUN apt-get install -y php7.0 php7.0-fpm php7.0-mysql php7.0-gd --allow-unauthenticated
+RUN apt-get install -y php5 php5-fpm php5-mysql php5-gd --allow-unauthenticated
+
+# mark volumes as externally mounted
+VOLUME ["/etc/nginx","/sentrifugo"]
 
 # create directories
 RUN mkdir -p /var/log/supervisor /run/php/ /etc/nginx /var/log/sentrifugo
