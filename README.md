@@ -27,8 +27,33 @@ On a fresh start, run `docker-compose up`.
 2. `sentrifugo-db` is a MySQL database container.
    This is linked to the nginx container as its database.
 
-### Notes ###
+## Notes ##
 
+### Major Bug
+
+1. Once you proceed through the initial setup steps of Sentrifugo, it is supposed to delete/rename
+the `/sentrifugo/install/index.php`. This will make `sentrifugo-url/index.php` actually *execute* instead of redirecting
+you to install everytime.
+
+Here's the chunk of code inside index.php:
+
+```
+$filepath = 'install/index.php';
+if(file_exists($filepath))
+{
+header("Location: install/index.php");
+}else
+```
+
+However, the deletion doesn't happen, so you always get redirected to installation.
+
+Therefore, *after you complete initial setup of Sentrifugo*:
+1. SSH to the Docker container `sentrifugo-app`.
+1. Rename the `/sentrifugo/install/` dir to something else.
+1. Verify that going to `<sentrifugo-url>/index.php` takes you to the login page.
+
+
+### Other
 1. Here `php-fpm` and `nginx` are started with supervisor.
 1. The `supervisord.conf` is a good example of starting multiple processes
    inside a docker container. The processes have to be started *in the
