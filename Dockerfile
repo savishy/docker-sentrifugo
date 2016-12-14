@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM ubuntu:14.04
 RUN apt-get update
 
 # install needed packages
@@ -6,9 +6,9 @@ RUN apt-get install -y software-properties-common debconf-utils nginx supervisor
 
 # install mysql and configure it headlessly
 RUN apt-get update \
-    && echo mysql-server-5.7 mysql-server/root_password password example_password | debconf-set-selections \
-    && echo mysql-server-5.7 mysql-server/root_password_again password example_password | debconf-set-selections \
-    && apt-get install -y mysql-server-5.7 -o pkg::Options::="--force-confdef" -o pkg::Options::="--force-confold" --fix-missing \
+    && echo mysql-server-5.5 mysql-server/root_password password example_password | debconf-set-selections \
+    && echo mysql-server-5.5 mysql-server/root_password_again password example_password | debconf-set-selections \
+    && apt-get install -y mysql-server-5.5 -o pkg::Options::="--force-confdef" -o pkg::Options::="--force-confold" --fix-missing \
     && apt-get install -y net-tools --fix-missing \
     && rm -rf /var/lib/apt/lists/*
 
@@ -16,8 +16,11 @@ RUN apt-get update \
 RUN add-apt-repository ppa:ondrej/php
 RUN apt-get update
 # install php
-# TODO "There were unauthenticated packages and -y was used without --allow-unauthenticated"
+# purge old php packages first
+# http://askubuntu.com/questions/756181/installing-php-5-6-on-xenial-16-04
+RUN apt-get purge `dpkg -l | grep php| awk '{print $2}' |tr "\n" " "`
 
+# TODO "There were unauthenticated packages and -y was used without --allow-unauthenticated"
 RUN apt-get install -y php5 php5-fpm php5-mysql php5-gd --allow-unauthenticated
 
 # mark volumes as externally mounted
@@ -30,7 +33,7 @@ RUN mkdir -p /var/log/supervisor /run/php/ /etc/nginx /var/log/sentrifugo
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
 # nginx
-ADD nginx/nginx.conf /etc/nginx/nginx.conf
+# ADD nginx/nginx.conf /etc/nginx/nginx.conf
 ADD nginx/sites-available/sentrifugo /etc/nginx/sites-available/sentrifugo
 RUN rm /etc/nginx/sites-enabled/default
 #ADD nginx/sites-available/default /etc/nginx/sites-available/default
